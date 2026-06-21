@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscription Platform — Mansour Kanswa</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%2334506A'/%3E%3Cstop offset='60%25' stop-color='%231F3346'/%3E%3Cstop offset='100%25' stop-color='%2316242F'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='42' font-family='Arial,Helvetica,sans-serif' font-size='32' font-weight='700' fill='%23ffffff' text-anchor='middle'%3EM%3C/text%3E%3C/svg%3E">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{ background:#FAFAF8; color:#1A1A1A; font-family:'Inter',-apple-system,sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .top-bar{ background:rgba(250,250,248,0.86); backdrop-filter:blur(10px); border-bottom:1px solid #E5E3DD; padding:16px 28px; display:flex; justify-content:space-between; align-items:center; }
+  .back-link{ font-family:'JetBrains Mono',monospace; font-size:13px; color:#6B6B6B; text-decoration:none; display:flex; align-items:center; gap:6px; transition:color .15s; }
+  .back-link:hover{ color:#1A1A1A; } .back-link svg{ width:14px; height:14px; }
+  .page-title{ font-size:13px; font-weight:600; color:#2D4356; letter-spacing:0.04em; }
+  .project-page{ max-width:900px; margin:0 auto; padding:40px 28px 60px; }
+  .project-header{ margin-bottom:40px; }
+  .project-header h1{ font-size:28px; font-weight:800; letter-spacing:-0.02em; margin-bottom:8px; }
+  .project-header p{ font-size:15px; color:#4A4A48; max-width:500px; }
+  .preview-section{ background:#fff; border:1px solid #E5E3DD; border-radius:14px; padding:40px; margin-bottom:40px; min-height:400px; display:flex; align-items:center; justify-content:center; }
+  .code-section h2{ font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#1A1A1A; margin-bottom:16px; }
+  pre{ background:#1a1a2e; color:#e0e0e0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.7; padding:24px; border-radius:10px; overflow-x:auto; tab-size:2; }
+  .hl-kw{ color:#c792ea; } .hl-fn{ color:#82aaff; } .hl-str{ color:#c3e88d; } .hl-num{ color:#f78c6c; } .hl-cm{ color:#546e7a; font-style:italic; }
+  footer{ text-align:center; padding:30px 28px; border-top:1px solid #E5E3DD; font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#6B6B6B; }
+
+  .sub{ max-width:640px; margin:0 auto; width:100%; }
+  .sub-toggle{ display:flex; gap:4px; margin-bottom:30px; background:#F0F2F5; border-radius:10px; padding:4px; max-width:280px; margin-left:auto; margin-right:auto; }
+  .sub-toggle button{ flex:1; padding:8px 16px; border:none; border-radius:7px; background:transparent; font-size:13px; font-weight:600; cursor:pointer; transition:.15s; }
+  .sub-toggle button.active{ background:#fff; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+  .sub-plans{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .sub-plan{ border:1px solid #E5E3DD; border-radius:12px; padding:24px 20px; text-align:center; transition:.15s; position:relative; }
+  .sub-plan:hover{ box-shadow:0 8px 24px rgba(0,0,0,0.08); }
+  .sub-plan.featured{ border-color:#2D4356; background:#F7FAFC; }
+  .sub-plan .badge{ position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#2D4356; color:#fff; font-size:10px; font-weight:700; padding:3px 12px; border-radius:10px; text-transform:uppercase; letter-spacing:0.05em; }
+  .sub-plan .icon{ font-size:32px; margin-bottom:10px; }
+  .sub-plan .name{ font-size:16px; font-weight:700; }
+  .sub-plan .desc{ font-size:12px; color:#6B6B6B; margin-bottom:14px; }
+  .sub-plan .price{ font-size:34px; font-weight:800; color:#2D4356; }
+  .sub-plan .price .period{ font-size:14px; font-weight:400; color:#6B6B6B; }
+  .sub-plan .features{ list-style:none; text-align:left; margin:16px 0; }
+  .sub-plan .features li{ padding:6px 0; font-size:13px; color:#4A4A48; border-bottom:1px solid #F0F2F5; }
+  .sub-plan .features li::before{ content:"✓ "; color:#3FA66A; font-weight:700; }
+  .sub-plan button{ width:100%; padding:10px; border:none; border-radius:7px; font-size:14px; font-weight:600; cursor:pointer; }
+  .sub-plan button.primary{ background:#2D4356; color:#fff; }
+  .sub-plan button.primary:hover{ background:#1F3346; }
+  .sub-plan button.outline{ background:transparent; border:1px solid #2D4356; color:#2D4356; }
+  .sub-plan button.outline:hover{ background:#E8EDF1; }
+  .sub-current{ margin-top:24px; padding:16px 20px; background:#E9F5EE; border:1px solid #CDE8D8; border-radius:10px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .sub-current strong{ color:#2A7A4D; }
+  .sub-current button{ padding:8px 16px; background:#fff; border:1px solid #2A7A4D; border-radius:6px; color:#2A7A4D; font-weight:600; font-size:12px; cursor:pointer; }
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <a class="back-link" href="../../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5m7-7l-7 7 7 7"/></svg>Back to portfolio</a>
+  <span class="page-title">Project / Subscription Platform</span>
+</div>
+<div class="project-page">
+  <div class="project-header">
+    <h1>Subscription Platform</h1>
+    <p>A subscription management platform with tiered pricing, billing cycles, and plan management.</p>
+  </div>
+  <div class="preview-section">
+    <div class="sub">
+      <div class="sub-toggle">
+        <button class="active" onclick="toggleBilling('monthly')">Monthly</button>
+        <button onclick="toggleBilling('annual')">Annual <span style="font-size:10px;opacity:.6">save 20%</span></button>
+      </div>
+      <div class="sub-plans" id="planGrid"></div>
+      <div class="sub-current" id="currentPlan">
+        <span>You're currently on the <strong>Pro</strong> plan — <span id="billingLabel">$29/month</span></span>
+        <button onclick="alert('Downgrade to Free plan?')">Change Plan</button>
+      </div>
+    </div>
+  </div>
+  <div class="code-section">
+    <h2>Source Code</h2>
+    <pre><span class="hl-cm">// Subscription Platform — tiered pricing with monthly/annual toggle</span>
+
+<span class="hl-kw">const</span> plans = [
+  { name: <span class="hl-str">"Free"</span>, icon: <span class="hl-str">"🌱"</span>, desc: <span class="hl-str">"For individuals getting started"</span>, monthly: <span class="hl-num">0</span>, annual: <span class="hl-num">0</span>, features: [<span class="hl-str">"3 projects"</span>, <span class="hl-str">"Basic analytics"</span>, <span class="hl-str">"48h support"</span>] },
+  { name: <span class="hl-str">"Pro"</span>, icon: <span class="hl-str">"🚀"</span>, desc: <span class="hl-str">"For growing teams"</span>, featured: <span class="hl-literal">true</span>, monthly: <span class="hl-num">29</span>, annual: <span class="hl-num">23</span>, features: [<span class="hl-str">"Unlimited projects"</span>, <span class="hl-str">"Advanced analytics"</span>, <span class="hl-str">"Priority support"</span>, <span class="hl-str">"API access"</span>] },
+  { name: <span class="hl-str">"Enterprise"</span>, icon: <span class="hl-str">"🏢"</span>, desc: <span class="hl-str">"For large organizations"</span>, monthly: <span class="hl-num">99</span>, annual: <span class="hl-num">79</span>, features: [<span class="hl-str">"Everything in Pro"</span>, <span class="hl-str">"Custom integrations"</span>, <span class="hl-str">"24/7 phone support"</span>, <span class="hl-str">"SLA guarantee"</span>, <span class="hl-str">"Dedicated account manager"</span>] },
+];
+
+<span class="hl-kw">let</span> isAnnual = <span class="hl-literal">false</span>;
+
+<span class="hl-kw">function</span> <span class="hl-fn">renderPlans</span>() {
+  planGrid.innerHTML = plans.<span class="hl-fn">map</span>(p =&gt; <span class="hl-str">`...`</span>).<span class="hl-fn">join</span>(<span class="hl-str">""</span>);
+}
+
+<span class="hl-kw">function</span> <span class="hl-fn">toggleBilling</span>(type) {
+  isAnnual = type === <span class="hl-str">"annual"</span>;
+  <span class="hl-fn">renderPlans</span>();
+}</pre>
+  </div>
+</div>
+<footer><span>Mansour Kanswa</span></footer>
+<script>
+  const plans = [
+    { name: "Free", icon: "🌱", desc: "For individuals getting started", monthly: 0, annual: 0, features: ["3 projects", "Basic analytics", "48h support"] },
+    { name: "Pro", icon: "🚀", desc: "For growing teams", featured: true, monthly: 29, annual: 23, features: ["Unlimited projects", "Advanced analytics", "Priority support", "API access"] },
+    { name: "Enterprise", icon: "🏢", desc: "For large organizations", monthly: 99, annual: 79, features: ["Everything in Pro", "Custom integrations", "24/7 phone support", "SLA guarantee", "Dedicated manager"] },
+  ];
+  let isAnnual = false;
+  let currentPlan = "Pro";
+
+  function renderPlans() {
+    document.getElementById("planGrid").innerHTML = plans.map(p => {
+      const price = isAnnual ? p.annual : p.monthly;
+      const period = isAnnual ? "/mo, billed annually" : "/month";
+      const isCurrent = p.name === currentPlan;
+      return `<div class="sub-plan ${p.featured ? 'featured' : ''}">
+        ${p.featured ? '<div class="badge">Popular</div>' : ''}
+        <div class="icon">${p.icon}</div>
+        <div class="name">${p.name}</div>
+        <div class="desc">${p.desc}</div>
+        <div class="price">$${price}<span class="period">${period}</span></div>
+        ${isAnnual && price > 0 ? '<div style="font-size:11px;color:#3FA66A;margin-top:2px">Save 20% vs monthly</div>' : ''}
+        <ul class="features">${p.features.map(f => `<li>${f}</li>`).join("")}</ul>
+        <button class="${isCurrent ? 'outline' : 'primary'}" onclick="${isCurrent ? "alert('You are already on this plan')" : "alert('Subscribed to ' + '"' + p.name + '"' + ' plan!')}">${isCurrent ? 'Current Plan' : (price === 0 ? 'Get Started' : 'Subscribe')}</button>
+      </div>`;
+    }).join("");
+    document.getElementById("billingLabel").textContent = isAnnual ? "$23/month" : "$29/month";
+  }
+
+  function toggleBilling(type) {
+    isAnnual = type === "annual";
+    document.querySelectorAll(".sub-toggle button").forEach(b => b.classList.toggle("active", b.textContent.toLowerCase().includes(type)));
+    renderPlans();
+  }
+  renderPlans();
+</script>
+</body>
+</html>
